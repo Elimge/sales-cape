@@ -12,6 +12,12 @@ data/
 *.csv
 *.xlsx
 
+# Power BI Project exclusions
+*.pbix.user
+*.pbip.user
+.pbi/localSettings.json
+.pbi/cache/
+
 # IDE
 .vscode/
 

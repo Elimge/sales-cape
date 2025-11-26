@@ -1,0 +1,39 @@
+table Dim_Geography
+	lineageTag: 6f0848ff-2260-41eb-a42d-dc9badb90a3d
+
+	column ID_City
+		dataType: int64
+		formatString: 0
+		lineageTag: 44fa5425-8735-4b13-afce-bafb26d12112
+		summarizeBy: none
+		sourceColumn: ID_City
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: d81045bf-9be9-490c-bc18-3f81dec0a94e
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Geography = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost", "hu_db"),
+				    public_clean_sales = Origen{[Schema="public",Item="clean_sales"]}[Data],
+				    #"Otras columnas quitadas" = Table.SelectColumns(public_clean_sales,{"City"}),
+				    #"Duplicados quitados" = Table.Distinct(#"Otras columnas quitadas"),
+				    #"Filas filtradas" = Table.SelectRows(#"Duplicados quitados", each ([City] <> "None")),
+				    #"Índice agregado" = Table.AddIndexColumn(#"Filas filtradas", "Índice", 1, 1, Int64.Type),
+				    #"Columnas reordenadas" = Table.ReorderColumns(#"Índice agregado",{"Índice", "City"}),
+				    #"Columnas con nombre cambiado" = Table.RenameColumns(#"Columnas reordenadas",{{"Índice", "ID_City"}})
+				in
+				    #"Columnas con nombre cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

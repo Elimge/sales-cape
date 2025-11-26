@@ -1,0 +1,156 @@
+table 'public clean_sales'
+	isHidden
+	lineageTag: 0e4b08da-f391-4dc1-9142-e31e67a765f6
+
+	column City
+		dataType: string
+		isHidden
+		lineageTag: a39544bb-6c60-4724-bdc0-87e2dbb674e2
+		summarizeBy: none
+		sourceColumn: City
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: b47f27f8-827b-4598-9bfd-8de5e830eb61
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variación
+			isDefault
+			relationship: 4749416b-f37f-431b-b080-adc2bf6fbfdd
+			defaultHierarchy: LocalDateTable_6943d781-1e10-4a9b-a5eb-93da81ee17c6.'Jerarquía de fechas'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		isHidden
+		lineageTag: 32f67962-e0a4-4f3b-85a9-4991ccd638dd
+		summarizeBy: none
+		sourceColumn: Product
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Type
+		dataType: string
+		isHidden
+		lineageTag: 41011212-fce4-4861-ac6d-b3f260ce9fdd
+		summarizeBy: none
+		sourceColumn: Product_Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: double
+		isHidden
+		lineageTag: 58d3f408-b1e7-4928-b98f-11e08fd00f2b
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Unit_Price
+		dataType: double
+		isHidden
+		lineageTag: 1113006c-da92-4f71-80f4-3fb251f056b2
+		summarizeBy: sum
+		sourceColumn: Unit_Price
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Sales_Type
+		dataType: string
+		isHidden
+		lineageTag: c63e43e4-6137-492d-bebe-3be19431a987
+		summarizeBy: none
+		sourceColumn: Sales_Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Client_Type
+		dataType: string
+		isHidden
+		lineageTag: da52f58b-cf1e-4b62-bd5e-1c8c4e9de15f
+		summarizeBy: none
+		sourceColumn: Client_Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		isHidden
+		lineageTag: 4f86b385-181a-4be5-9d72-511f6fbd6971
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Shipping_Cost
+		dataType: double
+		isHidden
+		lineageTag: db4159b5-6f65-44fe-8ee0-6d5a423fe9ca
+		summarizeBy: sum
+		sourceColumn: Shipping_Cost
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Sales
+		dataType: double
+		isHidden
+		lineageTag: 3de97ff7-973d-4e51-98f8-2ba5867017fc
+		summarizeBy: sum
+		sourceColumn: Total_Sales
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'public clean_sales' = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost", "hu_db"),
+				    public_clean_sales = Origen{[Schema="public",Item="clean_sales"]}[Data]
+				in
+				    public_clean_sales
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

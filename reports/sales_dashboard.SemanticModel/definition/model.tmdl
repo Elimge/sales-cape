@@ -1,0 +1,27 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CO
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["public clean_sales","Dim_Product","Dim_Geography","Fact_Sales","_Measures"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBIDesktopVersion = 2.146.1254.0 (25.08)+791a7518fadc83da883d79322a2658aff57c8db3
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'public clean_sales'
+ref table DateTableTemplate_315e657a-c2ca-4dc9-9598-6db569135c45
+ref table LocalDateTable_6943d781-1e10-4a9b-a5eb-93da81ee17c6
+ref table Dim_Product
+ref table Dim_Geography
+ref table Fact_Sales
+ref table LocalDateTable_e200e4fb-cdd4-4f55-afff-1c902f189bb1
+ref table _Measures
+
+ref cultureInfo es-ES
+

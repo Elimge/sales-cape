@@ -1,0 +1,47 @@
+table Dim_Product
+	lineageTag: 5782579d-d9ec-4b2e-b2f4-d82edd0cdd58
+
+	column Product
+		dataType: string
+		lineageTag: fe10366f-421f-4801-97a3-842e19b8aadb
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Type
+		dataType: string
+		lineageTag: 48b1d295-9a97-4202-814e-bc223d761db3
+		summarizeBy: none
+		sourceColumn: Product_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Product
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a301e5d-5f77-4733-9be2-9c06f6b3b522
+		summarizeBy: none
+		sourceColumn: ID_Product
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Product = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost", "hu_db"),
+				    public_clean_sales = Origen{[Schema="public",Item="clean_sales"]}[Data],
+				    #"Otras columnas quitadas" = Table.SelectColumns(public_clean_sales,{"Product", "Product_Type"}),
+				    #"Duplicados quitados" = Table.Distinct(#"Otras columnas quitadas"),
+				    #"Filas filtradas" = Table.SelectRows(#"Duplicados quitados", each ([Product] <> "None")),
+				    #"Índice agregado" = Table.AddIndexColumn(#"Filas filtradas", "Índice", 1, 1, Int64.Type),
+				    #"Columnas con nombre cambiado" = Table.RenameColumns(#"Índice agregado",{{"Índice", "ID_Product"}}),
+				    #"Columnas reordenadas" = Table.ReorderColumns(#"Columnas con nombre cambiado",{"ID_Product", "Product", "Product_Type"})
+				in
+				    #"Columnas reordenadas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

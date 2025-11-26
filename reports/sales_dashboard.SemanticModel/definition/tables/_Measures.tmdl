@@ -1,0 +1,46 @@
+table _Measures
+	lineageTag: c96cbbc8-5171-4ae3-91d0-033d892e4ed0
+
+	measure 'Total Sales' = SUM(Fact_Sales[Total_Sales])
+		lineageTag: f2e27313-7d5b-4bca-aec7-ad2b6b6b2192
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Units' = SUM(Fact_Sales[Quantity])
+		lineageTag: 1b91e326-5d0f-49df-b0c7-c6ff4a424fb4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Ticket' = AVERAGE(Fact_Sales[Total_Sales])
+		lineageTag: e0c6d254-9025-4003-9970-1d7ccd25aa09
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Transactions' = COUNTROWS(Fact_Sales)
+		formatString: 0
+		lineageTag: f62345f0-ad68-4a81-ac31-6466e94b5fb8
+
+	column Columna1
+		dataType: string
+		isHidden
+		lineageTag: 6a6a2d3e-2db0-4e54-896f-9109f20f1f20
+		summarizeBy: none
+		sourceColumn: Columna1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Columna1 = _t]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Columna1", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
